@@ -7,6 +7,7 @@ import { SimpleCard } from "../../components/cards/SimpleCard";
 import InputTextFilter from "../../components/input/InputTextFilter";
 import InputTextSearch from "../../components/input/InputTextSearch";
 import Navigation from "../../components/navigation/Navigation";
+import FormDetails from "../../components/templates/forms/FormDetails";
 import { api } from "../../services/api";
 import { getApiClient } from "../../services/getApiClient";
 
@@ -34,11 +35,28 @@ const Index = () => {
     await api
       .get("products")
       .then(({ data }: any) => {
-        console.log(data);
         setProducts(data);
         setFilterProducts(
           data.map((product: any, index: number) => {
-            return <SimpleCard key={index} product={product} />;
+            return (
+              <SimpleCard
+                key={index}
+                product={product}
+                clickAction={async () => {
+                  await Promise.resolve(
+                    setModalTemplate(
+                      <FormDetails
+                        id={index + product.product_id}
+                        product={product}
+                        setModal={setModal}
+                      />
+                    )
+                  ).then(() => {
+                    setModal(true);
+                  });
+                }}
+              />
+            );
           })
         );
       })

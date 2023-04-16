@@ -21,6 +21,8 @@ type AuthContextType = {
   setIsLoading: Function;
   user: UserType | null;
   signIn: (data: SignInType) => Promise<void>;
+  cart: any[];
+  setCart: Function;
 };
 
 export const AuthContext = createContext({} as AuthContextType);
@@ -29,6 +31,7 @@ export function AuthProvider({ children }: any) {
   const [user, setUser] = useState<UserType | null>(null);
   const [ref, setRef] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [cart, setCart] = useState<any[]>([]);
 
   const isAuthenticated = !!user;
 
@@ -37,7 +40,13 @@ export function AuthProvider({ children }: any) {
       setRef(document.location.href);
     }
 
-    const { token: token } = parseCookies();
+    const { token, cartCookie } = parseCookies();
+
+    if (!cartCookie) {
+      setCookie(undefined, "cartCookie", JSON.stringify(cart));
+    } else {
+      setCart(JSON.parse(cartCookie));
+    }
 
     if (token)
       api.get("get-auth-user").then(({ data }: AxiosResponse<any, any>) => {
@@ -71,6 +80,8 @@ export function AuthProvider({ children }: any) {
         setRef,
         isLoading,
         setIsLoading,
+        cart,
+        setCart,
       }}
     >
       {children}
