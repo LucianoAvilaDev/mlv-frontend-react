@@ -22,17 +22,17 @@ module.exports = {
       }),
 
       colors: {
-        themeBgBody: "rgb(229 231 235)",
+        themeBgBody: "rgb(214 214 214)",
 
-        themeLighter: "rgb(245, 225, 220)",
-        themeLight: "rgb(239 68 68)",
-        themeMedium: "rgb(185 28 28)",
-        themeDark: "rgb(153 27 27)",
-        themeDarker: "rgb(127 29 29)",
+        themeLighter: "rgb(188 206 230)",
+        themeLight: "rgb(116 194 242)",
+        themeMedium: "rgb(27 96 153)",
+        themeDark: "rgb(27 96 153)",
+        themeDarker: "rgb(17 49 107)",
 
-        themeTextLight: "rgb(249 250 251)",
-        themeTextMedium: "rgb(185 28 28)",
-        themeTextDark: "rgb(153 27 27)",
+        themeTextLight: "rgb(250 250 250)",
+        themeTextMedium: "rgb(27 96 153)",
+        themeTextDark: "rgb(17 49 107)",
       },
     },
   },

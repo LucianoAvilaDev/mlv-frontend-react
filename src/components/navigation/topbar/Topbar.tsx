@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import { useContext } from "react";
+import { FaShoppingCart } from "react-icons/fa";
 import { AuthContext } from "../../../contexts/AuthContext";
 import TopBarButton from "../../buttons/TopBarButton";
 
@@ -14,7 +15,6 @@ const Navbar = () => {
     >
       {!user ? (
         <>
-          <div className="text-themeTextLight">Olá, </div>
           <TopBarButton
             label={"Faça login"}
             clickAction={() => alert("entrei")}
@@ -38,6 +38,12 @@ const Navbar = () => {
           />
         </>
       )}
+      <div className="text-themeTextLight pr-4">
+        <FaShoppingCart
+          className="flex justify-center cursor-pointer text-themeTextLight font-semibold p-1 rounded-md hover:bg-themeLighter active:bg-transparent  hover:text-themeDarker active:text-themeTextLight"
+          size={38}
+        />
+      </div>
     </div>
   );
 };
