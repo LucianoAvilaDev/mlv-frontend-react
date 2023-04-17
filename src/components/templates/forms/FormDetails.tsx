@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { CartContext } from "../../../contexts/CartContext";
 import { ButtonSolid } from "../../buttons/ButtonSolid";
 import { BodyCard } from "../../cards/BodyCard";
 import Loader from "../../loader/Loader";
@@ -14,8 +15,13 @@ export const FormDetails = ({ id, setModal, product }: Props) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [animation, setAnimation] = useState<string>("animate-showIn");
 
-  const handleAddCart = (data: any) => {
+  const { addInCart } = useContext(CartContext);
+
+  const handleAddCart = async () => {
     setIsLoading(true);
+    await Promise.resolve(addInCart(product)).then(() => {
+      setIsLoading(false);
+    });
   };
 
   var currPrice = `${(
@@ -47,21 +53,27 @@ export const FormDetails = ({ id, setModal, product }: Props) => {
                   <div className="text-2xl div-2 pb-2 text-gray-700">
                     Por: R$ {currPrice.replace(".", ",")}
                   </div>
-                  <div className="px-2 py-1 antialiased w-full text-sm text-gray-900">
+                  <div className="px-2 py-1 antialiased text-sm text-gray-900">
                     <b>Descrição: </b>
                     {product.description}
                   </div>
-                  <div className="px-2 py-1 antialiased w-full text-sm text-gray-900">
-                    <b>Material: </b>
-                    {product.material}
-                  </div>
-                  <div className="px-2 py-1 antialiased w-full text-sm text-gray-900">
-                    <b>Categoria: </b>
-                    {product.category}
-                  </div>
-                  <div className="px-2 py-1 antialiased w-full text-sm text-gray-900">
-                    <b>Depatamento: </b>
-                    {product.department}
+                  <div className="flex flex-wrap justify-between">
+                    <div className="px-2 py-1 antialiased text-sm text-gray-900">
+                      <b>Material: </b>
+                      {product.material}
+                    </div>
+                    <div className="px-2 py-1 antialiased text-sm text-gray-900">
+                      <b>Categoria: </b>
+                      {product.category}
+                    </div>
+                    <div className="px-2 py-1 antialiased text-sm text-gray-900">
+                      <b>Depatamento: </b>
+                      {product.department}
+                    </div>
+                    <div className="px-2 py-1 antialiased text-sm text-gray-900">
+                      <b>Origem: </b>
+                      {product.provider == "br" ? "Brasileiro" : "Europeu"}
+                    </div>
                   </div>
                 </div>
                 <div
@@ -70,13 +82,13 @@ export const FormDetails = ({ id, setModal, product }: Props) => {
                   <ButtonSolid
                     id={"save"}
                     label={"Adicionar ao Carrinho"}
-                    color={"success"}
+                    color={"primary"}
                     onClick={handleAddCart}
                   />
                   <ButtonSolid
                     id={"cancel"}
                     label={"Voltar"}
-                    color={"default"}
+                    color={"secondary"}
                     onClick={() => setModal(false)}
                   />
                 </div>

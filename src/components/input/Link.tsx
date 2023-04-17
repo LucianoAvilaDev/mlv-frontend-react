@@ -1,5 +1,4 @@
 import { NextRouter, useRouter } from "next/router";
-import React from "react";
 
 type Props = {
   text: string;
@@ -10,7 +9,7 @@ export const Link = ({ text, url }: Props) => {
   const router: NextRouter = useRouter();
   return (
     <>
-      <div className="text-sm">
+      <div className="text-md">
         <span
           onClick={() => {
             router.push(url);

@@ -25,6 +25,9 @@ const InputTextSearch = ({ id, label, placeholder, searchAction }: props) => {
           type="text"
           className="rounded-md relative block w-full px-2 py-[0.5rem] border focus:border-2 focus:border-themeMedium border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none shadow-md focus:shadow-gray-500 focus:z-10 "
           placeholder={placeholder}
+          onChange={async (e) => {
+            await Promise.resolve(setValue(e.target.value));
+          }}
         />
         <button
           title={"Buscar"}

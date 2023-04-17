@@ -1,4 +1,5 @@
-import { number, object, string } from "yup";
+import { cpf } from "cpf-cnpj-validator";
+import { object, string } from "yup";
 
 export const UsersSchema = () => {
   return object({
@@ -18,7 +19,25 @@ export const UsersSchema = () => {
         return this.parent.password === value;
       }
     ),
-
-    roleId: number().required("Campo obrigatório!"),
+    birth_date: string().required(),
+    address: string()
+      .required("Campo obrigatório!")
+      .min(6, "No mínimo 6 caracteres")
+      .max(200, "No máximo 200 caracteres"),
+    cpf: string()
+      .required("Campo obrigatório!")
+      .test("is-cnpj", "CPF inválido!", (value?: string) =>
+        cpf.isValid(value ?? "")
+      ),
+    cep: string()
+      .required("Campo obrigatório!")
+      .test("is-cep", "CEP inválido!", (value?: string) =>
+        value ? value.replace("_", "").replace("-", "").length === 8 : false
+      ),
+    phone: string()
+      .required("Campo obrigatório!")
+      .test("is-phone", "Telefone inválido!", (value?: string) =>
+        value ? value.replace("_", "").length === 16 : false
+      ),
   });
 };

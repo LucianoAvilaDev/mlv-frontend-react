@@ -4,12 +4,15 @@ import "react-toastify/dist/ReactToastify.css";
 import "../../styles/globals.css";
 
 import { AuthProvider } from "../contexts/AuthContext";
+import { CartProvider } from "../contexts/CartContext";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <AuthProvider>
-      <Component {...pageProps} />
-      <ToastContainer />
+      <CartProvider>
+        <Component {...pageProps} />
+        <ToastContainer />
+      </CartProvider>
     </AuthProvider>
   );
 }

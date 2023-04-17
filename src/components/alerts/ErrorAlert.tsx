@@ -8,5 +8,5 @@ export const ErrorAlert = (msg?: string) =>
     closeOnClick: true,
     pauseOnHover: false,
     draggable: false,
-    theme: "colored",
+    theme: "light",
   });

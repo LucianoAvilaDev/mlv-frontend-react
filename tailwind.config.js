@@ -22,7 +22,7 @@ module.exports = {
       }),
 
       colors: {
-        themeBgBody: "rgb(214 214 214)",
+        themeBgBody: "rgb(235 235 235)",
 
         themeLighter: "rgb(188 206 230)",
         themeLight: "rgb(116 194 242)",

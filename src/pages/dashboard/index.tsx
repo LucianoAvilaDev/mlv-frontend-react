@@ -1,17 +1,14 @@
 import { AxiosError } from "axios";
-import { GetServerSideProps } from "next";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { ErrorAlert } from "../../components/alerts/ErrorAlert";
 import { SimpleCard } from "../../components/cards/SimpleCard";
 import InputTextFilter from "../../components/input/InputTextFilter";
 import InputTextSearch from "../../components/input/InputTextSearch";
+import Loader from "../../components/loader/Loader";
 import Navigation from "../../components/navigation/Navigation";
 import FormDetails from "../../components/templates/forms/FormDetails";
 import { api } from "../../services/api";
-import { getApiClient } from "../../services/getApiClient";
-
-type ProductType = {};
 
 type FiltersType = {
   material: string;
@@ -29,36 +26,41 @@ const Index = () => {
     department: "",
     name: "",
   });
+
+  const [loading, setLoading] = useState(true);
   const [filterProducts, setFilterProducts] = useState<any[]>([]);
 
   const getProducts = async () => {
     await api
       .get("products")
-      .then(({ data }: any) => {
-        setProducts(data);
-        setFilterProducts(
-          data.map((product: any, index: number) => {
-            return (
-              <SimpleCard
-                key={index}
-                product={product}
-                clickAction={async () => {
-                  await Promise.resolve(
-                    setModalTemplate(
-                      <FormDetails
-                        id={index + product.product_id}
-                        product={product}
-                        setModal={setModal}
-                      />
-                    )
-                  ).then(() => {
-                    setModal(true);
-                  });
-                }}
-              />
-            );
-          })
+      .then(async ({ data }: any) => {
+        await Promise.resolve(setProducts(data));
+        await Promise.resolve(
+          setFilterProducts(
+            data.map((product: any, index: number) => {
+              return (
+                <SimpleCard
+                  key={index}
+                  product={product}
+                  clickAction={async () => {
+                    await Promise.resolve(
+                      setModalTemplate(
+                        <FormDetails
+                          id={index + product.product_id}
+                          product={product}
+                          setModal={setModal}
+                        />
+                      )
+                    ).then(() => {
+                      setModal(true);
+                    });
+                  }}
+                />
+              );
+            })
+          )
         );
+        setLoading(false);
       })
       .catch((e: AxiosError) => ErrorAlert(e.response?.data as string));
   };
@@ -72,15 +74,37 @@ const Index = () => {
     var filteredProducts = await Promise.resolve(
       products.filter((product) => {
         return (
-          product.material.includes(material) &&
-          product.name.includes(name) &&
-          product.category.includes(category) &&
-          product.department.includes(department)
+          product.material.toLowerCase().includes(material.toLowerCase()) &&
+          product.name.toLowerCase().includes(name.toLowerCase()) &&
+          product.category.toLowerCase().includes(category.toLowerCase()) &&
+          product.department.toLowerCase().includes(department.toLowerCase())
         );
       })
     );
 
-    setFilterProducts(filteredProducts);
+    setFilterProducts(
+      filteredProducts.map((product: any, index: number) => {
+        return (
+          <SimpleCard
+            key={index}
+            product={product}
+            clickAction={async () => {
+              await Promise.resolve(
+                setModalTemplate(
+                  <FormDetails
+                    id={index + product.product_id}
+                    product={product}
+                    setModal={setModal}
+                  />
+                )
+              ).then(() => {
+                setModal(true);
+              });
+            }}
+          />
+        );
+      })
+    );
   };
 
   useEffect(() => {
@@ -96,6 +120,8 @@ const Index = () => {
   return (
     <>
       {modal && modalTemplate}
+
+      {loading && <Loader />}
       <Navigation>
         <div
           className={`flex shadow-md space-x-4 z-10 justify-start items-center px-2 bg-themeMedium h-20 w-full`}
@@ -175,10 +201,3 @@ const Index = () => {
 };
 
 export default Index;
-
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const apiClient: any = getApiClient(ctx);
-  return {
-    props: {},
-  };
-};

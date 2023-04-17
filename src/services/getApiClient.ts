@@ -6,9 +6,12 @@ export function getApiClient(ctx?: any) {
     baseURL: process.env.NEXT_PUBLIC_API_URL,
     headers: {
       "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
     },
     responseType: "json",
   });
+
+  api;
 
   const { token: token } = parseCookies(ctx);
 

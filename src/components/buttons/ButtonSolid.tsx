@@ -1,4 +1,3 @@
-import React from "react";
 import { GetStyleByColorName } from "../../utils/GetStyleByColorName";
 
 type Props = {
@@ -28,7 +27,7 @@ export const ButtonSolid = ({ id, label, color, type, onClick }: Props) => {
         onClick ? await onClick() : null;
       }}
     >
-      {label}
+      {label.toUpperCase()}
     </button>
   );
 };

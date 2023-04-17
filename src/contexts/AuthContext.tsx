@@ -10,7 +10,12 @@ type UserType = {
   id: string | number;
   name: string;
   email: string;
-  permissions: string[];
+  address: string;
+  cep: string;
+  cpf: string;
+  phone: string;
+  is_admin: boolean;
+  birth_date: string;
 };
 
 type AuthContextType = {
@@ -21,8 +26,6 @@ type AuthContextType = {
   setIsLoading: Function;
   user: UserType | null;
   signIn: (data: SignInType) => Promise<void>;
-  cart: any[];
-  setCart: Function;
 };
 
 export const AuthContext = createContext({} as AuthContextType);
@@ -31,7 +34,6 @@ export function AuthProvider({ children }: any) {
   const [user, setUser] = useState<UserType | null>(null);
   const [ref, setRef] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [cart, setCart] = useState<any[]>([]);
 
   const isAuthenticated = !!user;
 
@@ -40,18 +42,14 @@ export function AuthProvider({ children }: any) {
       setRef(document.location.href);
     }
 
-    const { token, cartCookie } = parseCookies();
-
-    if (!cartCookie) {
-      setCookie(undefined, "cartCookie", JSON.stringify(cart));
-    } else {
-      setCart(JSON.parse(cartCookie));
-    }
+    const { token } = parseCookies();
 
     if (token)
-      api.get("get-auth-user").then(({ data }: AxiosResponse<any, any>) => {
-        setUser(data);
-      });
+      api
+        .get("get-auth-user")
+        .then(async ({ data }: AxiosResponse<any, any>) => {
+          await Promise.resolve(setUser(data));
+        });
   }, []);
 
   const signIn = async (data: SignInType) => {
@@ -63,7 +61,7 @@ export function AuthProvider({ children }: any) {
 
     setCookie(undefined, "token", token);
 
-    api.defaults.headers["Authorization"] = `bearer ${token}`;
+    api.defaults.headers["Authorization"] = `Bearer ${token}`;
 
     setUser(user);
 
@@ -80,8 +78,6 @@ export function AuthProvider({ children }: any) {
         setRef,
         isLoading,
         setIsLoading,
-        cart,
-        setCart,
       }}
     >
       {children}

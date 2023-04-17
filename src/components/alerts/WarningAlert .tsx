@@ -8,5 +8,5 @@ export const WarningAlert = (msg?: string) =>
     closeOnClick: true,
     pauseOnHover: false,
     draggable: false,
-    theme: "colored",
+    theme: "light",
   });

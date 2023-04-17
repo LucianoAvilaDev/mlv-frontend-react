@@ -5,18 +5,10 @@ type Props = {
   id: string;
   name?: string;
   label: string;
-  setValue: Function;
-  errorMessage?: string;
+  errorMessage?: any;
 };
 
-const InputDate = ({
-  register,
-  name,
-  id,
-  errorMessage,
-  label,
-  setValue,
-}: Props) => {
+const InputDate = ({ register, name, id, errorMessage, label }: Props) => {
   return (
     <div className="'flex pt-0.5 flex-col">
       {label && (
@@ -33,9 +25,6 @@ const InputDate = ({
         name={name}
         className="rounded-md relative block w-full px-2 py-[0.5rem] border focus:border-2 focus:border-blue-500 border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none shadow-md focus:shadow-gray-500 focus:z-10 sm:text-sm"
         id={id}
-        onChange={(e: any) => {
-          setValue(name, e.target.value ?? "");
-        }}
       />
       {errorMessage && <ErrorLabel>{errorMessage}</ErrorLabel>}
     </div>
